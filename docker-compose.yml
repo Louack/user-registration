@@ -1,0 +1,35 @@
+services:
+  app:
+    container_name:
+      app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - MYSQL_DB_HOST=db
+      - MYSQL_DB_USER=root
+      - MYSQL_DB_PASSWORD=root_password
+      - MYSQL_DB_NAME=db
+    command: > 
+      sh -c "python3 -m src.databases.mysql.migrate 
+      && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+    depends_on:
+      - db
+
+  db:
+    container_name:
+      mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db
+    ports:
+      - "3306:3306"
+
+networks:
+  default:
+    driver: bridge

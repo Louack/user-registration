@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS activation_codes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    code VARCHAR(255) NOT NULL,
+    expiry_date DATETIME NOT NULL
+);
